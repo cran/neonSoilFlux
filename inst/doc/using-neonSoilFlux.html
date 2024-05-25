@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction the neonSoilFlux package</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction the neonSoilFlux package</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Welcome to the <code>neonSoilFlux</code> package! This vignette will
+guide you through the process of using this package to acquire and
+compute soil CO<span class="math inline">\(_{2}\)</span> fluxes at
+different sites in the National Ecological Observatory Network.</p>
+<p>You can think about this package working in two primary phases:</p>
+<ol style="list-style-type: decimal">
+<li>acquiring the environment data for a given month at a NEON site
+(<code>acquire_neon_data</code>). This includes:
+<ol style="list-style-type: lower-alpha">
+<li>Soil temperature at different depths.</li>
+<li>Soil water content at different depths.</li>
+<li>Soil CO<span class="math inline">\(_{2}\)</span> concentration.</li>
+<li>Atmospheric pressure</li>
+<li>Soil properties (bulk density, others)</li>
+</ol></li>
+<li>Given those properties, computing the soil surface fluxes and the
+associated uncertainty using a variety of methods to compute fluxes
+(<code>compute_neon_flux</code>).</li>
+</ol>
+<p>We split these two functions in order to optimize time and that both
+were fundamentally different processes. Acquiring the NEON data makes
+use of the <code>neonUtilities</code> package.</p>
+<p>This package takes the guess work out of which data products to
+collect, hoping to reduce the workflow needed. We rely very much on the
+<code>tidyverse</code> philosophy for computation and coding here.</p>
+<div id="acquiring-environmental-data" class="section level2">
+<h2>Acquiring environmental data</h2>
+<p>Load up the relevant libraries:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(neonSoilFlux)</span></code></pre></div>
+<p>Let’s say we want to acquire the NEON soil data at the
+<code>SJER</code> <a href="https://www.neonscience.org/field-sites/sjer">site</a> during the
+month June in 2021:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>out_env_data <span class="ot">&lt;-</span> <span class="fu">acquire_neon_data</span>(<span class="at">site_name =</span> <span class="st">&#39;SJER&#39;</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                  <span class="at">download_date =</span> <span class="st">&#39;2021-06&#39;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                  )</span></code></pre></div>
+<p>The output <code>out_env_data</code> for
+<code>acquire_neon_data</code> is a list of lists:</p>
+<ul>
+<li>The first element is <code>site_data</code>, a nested data frame
+containing measurements for the required flux gradient model during the
+given time period.</li>
+<li>The second element is <code>site_megapit</code>, a nested frame
+containing specific information about soils at the site (for bulk
+density calculations, etc)</li>
+</ul>
+<p>Two required inputs are needed to run the function
+acquire_neon_data:</p>
+<ul>
+<li>NEON site name (a four digit code standard by NEON)</li>
+<li>Download date, a string in the YYYY-MM format</li>
+<li>Optional arguments include <code>time_frequency</code>, which is 30
+minutes (the default) or the 1 minute data (currently untested) and if
+we download <a href="https://www.neonscience.org/data-samples/data-management/data-revisions-releases">provisional
+NEON data</a>.</li>
+</ul>
+<p>As the data are acquired various messages from the
+<code>loadByProduct</code> function from the <code>neonUtilities</code>
+package are shown - this is normal. Products are acquired from each
+spatial location (<code>horizontalPosition</code>) or vertical depth
+(<code>verticalPosition</code>) at a NEON site</p>
+<p>Outputs for <code>acquire_neon_data</code> are two nested data
+frames:</p>
+<ul>
+<li><code>site_data</code> This contains three variables: the
+measurement name (one of <code>soilCO2concentration</code>,
+<code>VSWC</code> (soil water content), <code>soilTemp</code> (soil
+temperature), and <code>staPres</code> (atmospheric pressure)),
+<code>monthly_mean</code> contains the mean value of the measurement at
+each horizontal and vertical depth. We compute the monthly mean using a
+bootstapped technique. <code>data</code> which contains the stacked
+variables acquired from neonUtilities - the horizontal and vertial
+positions, timestamp (in UTC), associated values, the QF flag (0 = pass,
+1 = fail, <a href="https://www.neonscience.org/data-samples/data-management/data-quality-program">LINK</a>)</li>
+<li><code>site_megapit</code>: the nested data frame of the soil
+sampling data, found here (LINK). This data table is essential what is
+reported back from acquiring the data product from NEON.</li>
+</ul>
+<div id="data-preparation" class="section level3">
+<h3>Data preparation</h3>
+<p>For each data product, the <code>acquire_neon_data</code> function
+also performs two additional checks:</p>
+<ul>
+<li>The soil water content data product requires some additional
+calibration to correct both the soil sensor depth and calibration in the
+function <code>swc_correct</code>. Information about regarding this
+correction is found here: <a href="https://data.neonscience.org/data-products/DP1.00094.001">LINK</a>.
+Once updated sensors are installed in the future we will depreciate this
+function.</li>
+<li>The actual measurement depth (in meters) is extracted for each
+position.</li>
+<li>The monthly mean for each measurement at each depth is computed,
+described below.</li>
+</ul>
+<div id="computing-the-monthly-mean" class="section level4">
+<h4>Computing the monthly mean</h4>
+<p>The monthly mean is utilized when a given measurement fails final QF
+checks. This function is provided by <a href="https://github.com/zoey-rw/microbialForecasts/blob/caa7b1a8aa8a131a5ff9340f1562cd3a3cb6667b/data_construction/covariate_prep/soil_moisture/clean_NEON_sensor_moisture_data.r">code</a>
+from <a href="https://github.com/zoey-rw">Zoey Werbin</a>. For a
+location (<code>horizontalPosition</code>) given depth and A monthly
+mean is computed when there are at least 15 days of measurements. Assume
+you have a vector of measurements <span class="math inline">\(\vec{y}\)</span>, standard errors <span class="math inline">\(\vec{\sigma}\)</span>, and expanded uncertainty
+<span class="math inline">\(\vec{\epsilon}\)</span> (all of length <span class="math inline">\(M\)</span>) that passes the QF checks in a given
+month. The expanded uncertainty <span class="math inline">\(\vec{\epsilon}\)</span> is generated by NEON to be
+include the <a href="https://www.neonscience.org/data-samples/data-management/data-quality-program">95%
+confidence interval</a>. We have that <span class="math inline">\(\vec{\sigma}_{i}\leq\vec{\epsilon}_{i}\)</span>.
+We define the bias <span class="math inline">\(\vec{b}=\sqrt{\left(\vec{\epsilon}\right)^{2}-\left(\vec{\sigma}\right)^{2}}\)</span>
+to be the quadrature difference between the expanded uncertainty and the
+standard error.</p>
+<p>We generate a bootstrap sample of the mean <span class="math inline">\(\overline{y}\)</span> and standard error <span class="math inline">\(\overline{s}\)</span> the following ways. Here we
+set the number of bootstrap samples <span class="math inline">\(N\)</span> to be 5000. Entries for <span class="math inline">\(\overline{y}_{i}\)</span> and <span class="math inline">\(\overline{s}_{i}\)</span> are determined by the
+following:</p>
+<ol style="list-style-type: decimal">
+<li>Randomly sample from the uncertainty and bias independently: <span class="math inline">\(\vec{\sigma}_{j}\)</span> and the bias <span class="math inline">\(\vec{b}_{k}\)</span> (not necessarily the same
+sample)</li>
+<li>Generate <span class="math inline">\(N\)</span> random samples from
+a normal distribution with mean <span class="math inline">\(\vec{y}\)</span> and standard deviation <span class="math inline">\(\vec{\sigma}_{j}\)</span>. Since <span class="math inline">\(M&lt;N\)</span>, <code>R</code> will recycle the
+vector <span class="math inline">\(\vec{y}\)</span> so that this sample
+is of length <span class="math inline">\(M\)</span>. We will call the
+sample of <span class="math inline">\(\vec{y}\)</span> as <span class="math inline">\(\vec{x}\)</span>.</li>
+<li>With these <span class="math inline">\(N\)</span> random samples,
+<span class="math inline">\(\overline{y}_{i}=\overline{\vec{x}}+\vec{b}_{k}\)</span>
+and <span class="math inline">\(s_{i}\)</span> is the sample standard
+deviation of <span class="math inline">\(\vec{x}\)</span>. We expect
+that <span class="math inline">\(s_{i} \approx
+\vec{\sigma}_{j}\)</span>.</li>
+</ol>
+<p>Once that is complete, the reported monthly mean and standard
+deviation is <span class="math inline">\(\overline{\overline{y}}\)</span> and <span class="math inline">\(\overline{s}\)</span>.</p>
+</div>
+</div>
+<div id="visualizing-outputs" class="section level3">
+<h3>Visualizing outputs</h3>
+<p>With the resulting output from <code>acquire_neon_data</code>, you
+can then unnest the different data frames to make plots, for
+example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Extract data</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>VSWC_data <span class="ot">&lt;-</span> out_env_data<span class="sc">$</span>site_data <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">filter</span>(measurement <span class="sc">==</span> <span class="st">&#39;VSWC&#39;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols=</span><span class="fu">c</span>(<span class="st">&quot;data&quot;</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co"># Plot data</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>VSWC_data <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>startDateTime,<span class="at">y=</span>VSWCMean)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color=</span><span class="fu">as.factor</span>(VSWCFinalQF))) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="fu">facet_grid</span>(verticalPosition<span class="sc">~</span>horizontalPosition)</span></code></pre></div>
+</div>
+</div>
+<div id="computing-fluxes" class="section level2">
+<h2>Computing fluxes</h2>
+<p>Once we have <code>out_env_data</code> from
+<code>acquire_neon_flux</code>, we then compute the fluxes at this
+site:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>out_fluxes <span class="ot">&lt;-</span> <span class="fu">compute_neon_flux</span>(<span class="at">input_site_env =</span> out_env_data<span class="sc">$</span>site_data,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                  <span class="at">input_site_megapit =</span> out_env_data<span class="sc">$</span>site_megapit</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                  )</span></code></pre></div>
+<p>The resulting data frame <code>out_fluxes</code> has the following
+variables:</p>
+<ul>
+<li><code>startDateTime</code>: Time period of measurement (as
+POSIXct)</li>
+<li><code>horizontalPosition</code>: Sensor location where flux is
+computed</li>
+<li><code>flux_compute</code>: A nested tibble with variables (1)
+<code>flux</code>, <code>flux_err</code>, and <code>method</code> (one
+of 4 implemented)</li>
+<li><code>diffusivity</code>: Computation of surface diffusivity</li>
+<li><code>VSWCMeanQF</code>: QF flag for soil water content across all
+vertical depths at the given horizontal position: 0 = no issues, 1 =
+monthly mean used in measurement, 2 = QF fail</li>
+<li><code>soilTempMeanQF</code>: QF flag for soil temperature across all
+vertical depths at the given horizontal position: 0 = no issues, 1 =
+monthly mean used in measurement, 2 = QF fail</li>
+<li><code>soilCO2concentrationMeanQF</code>: QF flag for soil CO2
+concentration across all vertical depths at the given horizontal
+position: 0 = no issues, 1 = monthly mean used in measurement, 2 = QF
+fail</li>
+<li><code>staPresMeanQF</code>: QF flag for atmospheric pressure across
+all vertical depths at the given horizontal position: 0 = no issues, 1 =
+monthly mean used in measurement, 2 = QF fail</li>
+</ul>
+<p>A QF measurement fails when there is a monthly mean could not be
+computed for a measurement. Note that this would cause
+<strong>all</strong> flux calculations to fail at that given horizontal
+position.</p>
+<div id="assessing-environmental-qf-flags" class="section level3">
+<h3>Assessing Environmental QF flags</h3>
+<p>You can see the distribution the QF flags for each environmental
+measurement with <code>env_fingerprint_plot</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">env_fingerprint_plot</span>(out_fluxes)</span></code></pre></div>
+<div id="explanation-of-qf-check-values" class="section level4">
+<h4>Explanation of QF check values:</h4>
+<ul>
+<li>“Pass” means that for the given timepoint, the monthly mean was not
+used or the sensor was not offline. This is the highest quality
+measurement.</li>
+<li>“Monthly Mean” means that for the given timepoint the measurement
+value was replaced by the monthly mean.</li>
+<li>“Fail” means that no measurement was available. This occurs if there
+is not sufficient data to compute the monthly mean. When a measurement
+fails it usually will be for the entire month.</li>
+</ul>
+</div>
+</div>
+<div id="assessing-flux-qf-flags" class="section level3">
+<h3>Assessing flux QF flags</h3>
+<p>Similarly, you can see the distribution of QF flags for each
+diffusivity and flux computation with
+<code>flux_fingerprint_plot</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">flux_fingerprint_plot</span>(out_fluxes)</span></code></pre></div>
+<div id="explanation-of-qf-check-values-1" class="section level4">
+<h4>Explanation of QF check values:</h4>
+<ul>
+<li>“Pass” means that for the given timepoint, the computed flux
+measurement was not NA or positive (the sign of the derived flux
+conformed to expectations). Monthly means could be used in the
+computation.</li>
+<li>“Fail” means that the flux was not computed. This occurs if there is
+not sufficient data to compute the monthly mean (one environmental
+measurement was “Fail”), or the computed flux was negative.</li>
+</ul>
+</div>
+</div>
+<div id="visualizing-outputs-1" class="section level3">
+<h3>Visualizing outputs</h3>
+<p>To plot the flux results:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>out_fluxes <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>diffusivity) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols=</span><span class="fu">c</span>(flux_compute)) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>startDateTime,<span class="at">y=</span>flux,<span class="at">color=</span>method)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>horizontalPosition,<span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>)</span></code></pre></div>
+<p>The diffusivity can be plotted similarly:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>out_fluxes <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>flux_compute) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols=</span><span class="fu">c</span>(diffusivity)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>startDateTime,<span class="at">y=</span>diffusivity,<span class="at">color=</span><span class="fu">as.factor</span>(zOffset))) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>horizontalPosition,<span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>)  </span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
