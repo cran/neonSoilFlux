@@ -4,10 +4,12 @@
 \alias{flux_fingerprint_plot}
 \title{Helper function to plot QF results for fluxes.}
 \usage{
-flux_fingerprint_plot(input_fluxes)
+flux_fingerprint_plot(input_fluxes, input_diffus_method = "Marshall")
 }
 \arguments{
-\item{input_fluxes}{data frame of computed fluxes (may be Marshall or Millington-Quirk)}
+\item{input_fluxes}{data frame of computed fluxes}
+
+\item{input_diffus_method}{character string of diffusivity method used to compute fluxes. Can be one of "Marshall" or "Millington-Quirk".}
 }
 \value{
 A ggplot graph where we have ordered factors showing the QA values a given flux computation
@@ -17,9 +19,7 @@ Given a flux measurement data frame, show when the flux and diffusivity measurem
 }
 \examples{
 # Make a fingerprint plot for computed flux values:
-flux_fingerprint_plot(sjer_flux_2022_06$millington_quirk)
-# Can also use
-flux_fingerprint_plot(sjer_flux_2022_06$marshall)
+flux_fingerprint_plot(sjer_flux_2022_06)
 }
 \author{
 John Zobitz \email{zobitz@augsburg.edu}

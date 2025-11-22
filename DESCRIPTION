@@ -2,7 +2,7 @@ Package: neonSoilFlux
 Type: Package
 Title: Compute Soil Carbon Fluxes for the National Ecological
         Observatory Network Sites
-Version: 2.0.0
+Version: 3.0.0
 Authors@R: c(
     person("John", "Zobitz", email = "zobitz@augsburg.edu", role = c("aut","cre"),comment = c(ORCID = "0000-0002-1830-143X") ),
     person("Edward", "Ayres", email = "eayres@battelleecology.org", role = c("aut"),comment = c(ORCID = "0000-0003-1846-1473") ),
@@ -20,13 +20,13 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.1)
 Imports: dplyr, ggplot2, lubridate, neonUtilities, purrr, stats,
-        stringr, tibble, tidyr, tidyselect
-Suggests: knitr, rmarkdown, bookdown
+        stringr, tibble, tidyr, tidyselect, rlang
+Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2025-08-24 12:59:09 UTC; zobitz
+Packaged: 2025-11-22 19:24:52 UTC; zobitz
 Author: John Zobitz [aut, cre] (ORCID: <https://orcid.org/0000-0002-1830-143X>),
   Edward Ayres [aut] (ORCID: <https://orcid.org/0000-0003-1846-1473>),
   Katie O'Rourke [ctb] (LinkedIn,
@@ -41,4 +41,4 @@ Author: John Zobitz [aut, cre] (ORCID: <https://orcid.org/0000-0002-1830-143X>),
     <https://www.linkedin.com/in/ly-xiong-bb83ba1b2/>)
 Maintainer: John Zobitz <zobitz@augsburg.edu>
 Repository: CRAN
-Date/Publication: 2025-08-24 13:20:02 UTC
+Date/Publication: 2025-11-22 19:40:02 UTC

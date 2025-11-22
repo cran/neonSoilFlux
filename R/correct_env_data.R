@@ -15,9 +15,10 @@
 #'
 #' @examples
 #' \donttest{
+#' # Note: you may need to first aqcuire the NEON data using acquire_neon_data
+#' # Now correct existing environmental data:
 #' corrected_data <- correct_env_data(sjer_env_data_2022_06)
 #' }
-
 
 
 
@@ -30,6 +31,7 @@ correct_env_data <- function(input_data) {
   # changelog and author contributions / copyrights
   #   John Zobitz (2024-05-07)
   #     original creation
+  #   2024-11-24: Update to improve efficiencies in interpolation
 
 
   .data = NULL  # Appease R CMD Check
@@ -81,11 +83,40 @@ correct_env_data <- function(input_data) {
     measurement_name = c("VSWC","soilTemp"),  # Measurements we are interpolating
     measurement_interpolate = "soilCO2concentration")  # We always want to interpolate to this depth
 
+  # Now we want to join this all up
+  co2_measurement <- site_interp |>
+    dplyr::filter(.data[["measurement"]] =="soilCO2concentration") |>
+    dplyr::select(-.data[["monthly_mean"]]) |>
+    tidyr::unnest(cols=c("data")) |>
+    dplyr::select(-.data[["measurement"]])
+
+  # Now we want to join this all up
+  VSWC_measurement <- site_interp |>
+    dplyr::filter(.data[["measurement"]] =="VSWC") |>
+    dplyr::select(-.data[["monthly_mean"]]) |>
+    tidyr::unnest(cols=c("data")) |>
+    dplyr::select(-.data[["measurement"]])
+
+  # Now we want to join this all up
+  soilTemp_measurement <- site_interp |>
+    dplyr::filter(.data[["measurement"]] =="soilTemp") |>
+    dplyr::select(-.data[["monthly_mean"]]) |>
+    tidyr::unnest(cols=c("data")) |>
+    dplyr::select(-.data[["measurement"]])
+
+  env_data_all <- co2_measurement |>
+    dplyr::inner_join(VSWC_measurement,by=c("horizontalPosition","startDateTime","zOffset")) |>
+    dplyr::inner_join(soilTemp_measurement,by=c("horizontalPosition","startDateTime","zOffset")) |>
+    dplyr::group_by(.data[["startDateTime"]],.data[["horizontalPosition"]]) |>
+    tidyr::nest() |>
+    dplyr::rename(env_data = .data[["data"]])
+
   # Add in the pressure measurements
-  pressure_measurement <- site_filtered |>
+  pressure_measurement <- site_interp |>
     dplyr::filter(.data[["measurement"]] =="staPres") |>
     dplyr::select(-.data[["monthly_mean"]]) |>
     tidyr::unnest(cols=c("data")) |>
+    dplyr::select(-.data[["measurement"]]) |>
     dplyr::group_by(.data[["startDateTime"]],.data[["horizontalPosition"]]) |>
     tidyr::nest() |>
     dplyr::rename(press_data = .data[["data"]]) |>
@@ -95,11 +126,10 @@ correct_env_data <- function(input_data) {
 
 
   ### Then take each of the measurements to associate them with errors
-  all_measures <- site_interp |>
-    dplyr::inner_join(pressure_measurement, by=c("startDateTime")) |>
-    dplyr::mutate(staPresMeanQF = purrr::map_int(.x=.data[["press_data"]],.f=~dplyr::pull(.x,staPresFinalQF))) |>
-    dplyr::relocate(.data[["press_data"]],.after="env_data") |>
-    dplyr::select(.data[["horizontalPosition"]],.data[["startDateTime"]],.data[["env_data"]],.data[["press_data"]])
+  all_measures <- env_data_all |>
+    dplyr::inner_join(pressure_measurement, by=c("startDateTime"))
+
+
 
     return(list(all_flags = qf_flags,site_filtered = all_measures) )
 
