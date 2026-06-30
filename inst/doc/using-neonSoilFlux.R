@@ -5,15 +5,21 @@ knitr::opts_chunk$set(
 )
 
 ## ----eval = FALSE-------------------------------------------------------------
+# neonSoilFlux::neon_api_token("YOUR_TOKEN_HERE", install = TRUE)
+
+## ----eval = FALSE-------------------------------------------------------------
 # library(tidyverse)
 # library(neonSoilFlux)
+# library(neonUtilities)
 
 ## ----eval=FALSE---------------------------------------------------------------
 # out_env_data <- acquire_neon_data(site_name = 'SJER',
-#                   download_date = '2022-06',
+#                   download_date = '2022-06'
 #                   )
 
 ## ----eval=FALSE---------------------------------------------------------------
+# library(tidyverse)
+# 
 # # Extract data
 # VSWC_data <- out_env_data$site_data |>
 #   filter(measurement == 'VSWC') |>
@@ -26,9 +32,10 @@ knitr::opts_chunk$set(
 #   facet_grid(verticalPosition~horizontalPosition)
 
 ## ----eval=FALSE---------------------------------------------------------------
-# out_fluxes <- compute_neon_flux(input_site_env = out_env_data$site_data,
-#                   input_site_megapit = out_env_data$site_megapit
-#                   )
+# out_fluxes <- compute_neon_flux(
+#   input_site_env = out_env_data$site_data,
+#   input_site_megapit = out_env_data$site_megapit
+#   )
 
 ## ----eval = FALSE-------------------------------------------------------------
 # env_fingerprint_plot(out_fluxes)
