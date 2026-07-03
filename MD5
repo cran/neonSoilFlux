@@ -1,12 +1,12 @@
-89df10dfd19c7fda7c183632e29e08bd *DESCRIPTION
+596dc0010c650ba7672e65826b64f856 *DESCRIPTION
 ee0c5273af7a039fc8b38aff0341fe03 *NAMESPACE
-a8d2ff5ace8d4f1b10a6fbf8f3a84022 *NEWS.md
+59237aba9cf54f58dc9c813ec710b9ae *NEWS.md
 77d3ceacca9831a3909db0973f178d67 *R/acquire_neon_data.R
 49843f297ea4dd4f3e770b68fd79aa43 *R/check_qf_flags.R
 666b0aad36d0f3e9a9e753cfa02f3d77 *R/co2_to_umol.R
 929c1c86017a931d6e01c80d681f0af2 *R/compute_flux_gradient_layer.R
 9f20a8cc13e68c94d1e016ecea16f2fa *R/compute_monthly_mean.R
-8150a3ba0946c22ed8046d3eeccf93ee *R/compute_neon_flux.R
+17802272d2668a3fe6d3d1982eb4201a *R/compute_neon_flux.R
 70cc482d0cb4b19586a3fa999dc15a7d *R/compute_surface_flux.R
 6b73bf53a2729d8ead39963c2f308b23 *R/compute_surface_flux_layer.R
 93168f4de24797bd1eb9e7c84e304d0b *R/correct_env_data.R
@@ -53,7 +53,7 @@ dffbee3a10ebd59d4a94d54e6ce7cbd3 *man/acquire_neon_data.Rd
 9900a0896dad389f20ce23bbd26c0690 *man/co2_to_umol.Rd
 3fc6488350fa07c2af0cc973182579c8 *man/compute_flux_gradient_layer.Rd
 3ed89969b3aa3b194641bb3e749f09c3 *man/compute_monthly_mean.Rd
-66eb67f1859f54d0fce8b3fbde220143 *man/compute_neon_flux.Rd
+b8d1f0eab9248e4a7409c79c3c098aa9 *man/compute_neon_flux.Rd
 5894585501bbbd15ad2f46afa46e17b4 *man/compute_surface_flux.Rd
 f8282e0802bf67597d3f58761a1bfa5c *man/compute_surface_flux_layer.Rd
 65038c2fef3a5bf2cb4b41de55432465 *man/correct_env_data.Rd
